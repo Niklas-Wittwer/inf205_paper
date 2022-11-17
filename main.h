@@ -1,4 +1,0 @@
-#ifndef
-/*
-This is the main header file to declare functions and classes
-*/
