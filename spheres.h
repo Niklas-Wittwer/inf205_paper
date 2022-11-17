@@ -1,0 +1,3 @@
+/*
+This is the header file to define the sphere class
+*/
