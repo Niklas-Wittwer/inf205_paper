@@ -1,10 +1,11 @@
 #include "box.h"
 /*
-Functions for the algorithm
+Running the algorithm
 */
 
 
+int main(Box original) {
 
-void create_boxes(){}
-void move_spheres(){}
+}
+
 
