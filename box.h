@@ -7,6 +7,10 @@
 
 #include "sphere.h"
 
+/*
+Declaring the box class and its function
+This code is given from the lecturer and not our own work
+*/
 class Box
 {
 public:
