@@ -101,8 +101,10 @@ double Box::get_extensions(int axis) {
 }
 
 int Box::add_boxes(int n) {
-   
+   double dx = this->get_extensions(0), dy = this->get_extensions(1), dz = this->get_extensions(2);
+
 }
+
 
 // create component, return cid
 int Box::add_component(double sphere_size)

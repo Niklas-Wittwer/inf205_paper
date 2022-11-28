@@ -26,7 +26,7 @@ public:
    }
 
    double get_extensions(int axis);
-   
+
    int add_boxes(int n); // Add sub-boxes. Is component id nessecary?
 
    int add_component(double sphere_size);  // create component, return cid
@@ -36,6 +36,7 @@ private:
    double extension[3];  // size of the box
    std::map<double, int, std::greater<double>> components;  // component IDs (value) ordered by size (key)
    std::vector<std::vector<Sphere>> particles;  // maps each component ID to the spheres associated with that component
+   std::vector<std::vector<Box>> boxes;
    size_t N = 0;  // total number of particles
 };
 
