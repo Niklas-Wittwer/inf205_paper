@@ -9,7 +9,7 @@
 
 /*
 Declaring the box class and its function
-This code is given from the lecturer and not our own work
+This code is build upon the code given by the lecturer
 */
 class Box
 {
@@ -24,7 +24,11 @@ public:
       this->extension[1] = y;
       this->extension[2] = z;
    }
+
+   double get_extensions(int axis);
    
+   int add_boxes(int n); // Add sub-boxes. Is component id nessecary?
+
    int add_component(double sphere_size);  // create component, return cid
    int add_particle(size_t pid, double sphere_size, double q[3]);  // create particle, return cid
    

@@ -1,4 +1,9 @@
 #include "box.h"
+#include <cassert>
+
+/*
+This code is built upon the benchmarking files given by the lecturer
+*/
 
 void Box::in(std::istream* source)
 {
@@ -89,6 +94,16 @@ long Box::count_overlaps()
    return overlaps;
 }
 
+// Get original box extensions to create sub boxes
+double Box::get_extensions(int axis) {
+   assert((axis == 0) || (axis == 1) || (axis == 2));
+   return this->extension[axis];
+}
+
+int Box::add_boxes(int n) {
+   
+}
+
 // create component, return cid
 int Box::add_component(double sphere_size)
 {
@@ -97,6 +112,7 @@ int Box::add_component(double sphere_size)
    this->particles.push_back(std::vector<Sphere>());
    return cid;
 }
+
    
 // create particle, return cid
 int Box::add_particle(size_t pid, double sphere_size, double q[3])
