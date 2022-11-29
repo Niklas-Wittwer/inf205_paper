@@ -11,7 +11,7 @@ int main(Box original) {
     // Create pbc and assign their spheres
     int n_pbc = std::pow(4,3);
     Box *pbc = new Box[n_pbc];
-    create_pbc(original, &pbc);
+    create_pbc(original, pbc);
 
     //monte carlo
 
