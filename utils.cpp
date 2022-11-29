@@ -21,7 +21,7 @@ void create_pbc(Box origin, Box pbc[]){
 
     // Adding the spheres to its belonging sub boxes
     for (auto i = begin (origin.particles); i != end(origin.particles); ++i){
-
+        
     }
 }
 void monte_carlo(Box box1){}

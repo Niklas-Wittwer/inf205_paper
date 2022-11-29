@@ -14,6 +14,7 @@ This code is build upon the code given by the lecturer
 class Box
 {
 public:
+   std::vector<std::vector<Sphere>> particles;  // maps each component ID to the spheres associated with that component
    void in(std::istream* source);  // read from *source
    void out(std::ostream* target);  // write to *target
    
@@ -33,7 +34,6 @@ public:
 private:
    double extension[3];  // size of the box
    std::map<double, int, std::greater<double>> components;  // component IDs (value) ordered by size (key)
-   std::vector<std::vector<Sphere>> particles;  // maps each component ID to the spheres associated with that component
    size_t N = 0;  // total number of particles
 };
 
