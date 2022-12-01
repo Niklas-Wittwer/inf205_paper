@@ -6,7 +6,8 @@
 Header file for functions related to our algorithm
 */
 
-void create_pbc(Box origin, Box pbc[]);
+void create_pbc(Box origin, std::vector<std::vector<std::vector<Box>>>& pbc);
+
 void monte_carlo(Box box1){};
 void move_spheres(Box optimal_pos, int n){};
 

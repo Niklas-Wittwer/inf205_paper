@@ -1,5 +1,6 @@
-#include<iostream>
-#include<cmath>
+#include <iostream>
+#include <stdio.h>
+#include <cmath>
 #include "box.h"
 #include "utils.h"
 /*
@@ -8,16 +9,15 @@ Main runfile for the algorithm
 
 
 int main(Box original) {
-    // Create pbc and assign their spheres
-    int n_pbc = std::pow(4,3);
-    Box *pbc = new Box[n_pbc];
+    // Get limits from the box
+    // Create pbc 
+    std::vector<std::vector<std::vector<Box>>> pbc(4, std::vector<std::vector<Box>>(4, std::vector<Box>(4, Box())));
     create_pbc(original, pbc);
 
     //monte carlo
 
     //move spheres in original box
 
-    delete [] pbc;
 }
 
 
