@@ -23,28 +23,8 @@ void create_pbc(Box origin, std::vector<std::vector<std::vector<Box>>>& pbc, int
             }
         }
     }
-    // Allocate spheres to the pbc with an approxiomate equal distribution of same sized spheres
-    for (auto i = begin (origin.particles); i != end(origin.particles); ++i){
-        int x = 0, y = 0, z = 0;
-        double curr_size = 0, prev_size = 0;
-        if (curr_size != prev_size){
-            x = 0, y = 0, z = 0;
-            prev_size = curr_size;
-        }
-        if (x == 4){
-            y++;
-            x = 0;
-        }
-        if (y == 4){
-            z++;
-            y = 0;
-        }
-        if (z == 4){
-            z = 0;
-        }
-        pbc[x][y][z].particles.push_back(i[0]);
-        x++;
-    }
+    //Distribute spheres to the pbc
+    origin.allocate_spheres(pbc);
 
 }
 void monte_carlo(Box box1){}

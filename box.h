@@ -14,8 +14,6 @@ This code is build upon the code given by the lecturer
 class Box
 {
 public:
-   std::vector<std::vector<Sphere>> particles;  // maps each component ID to the spheres associated with that component
-   std::map<double, int, std::greater<double>> components;  // component IDs (value) ordered by size (key)
 
    void in(std::istream* source);  // read from *source
    void out(std::ostream* target);  // write to *target
@@ -29,6 +27,8 @@ public:
    }
 
    double get_extensions(int axis);
+   void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc);
+
 
    int add_component(double sphere_size);  // create component, return cid
    int add_particle(size_t pid, double sphere_size, double q[3]);  // create particle, return cid
@@ -36,6 +36,9 @@ public:
 private:
    double extension[3];  // size of the box
    size_t N = 0;  // total number of particles
+   std::vector<std::vector<Sphere>> particles;  // maps each component ID to the spheres associated with that component
+   std::map<double, int, std::greater<double>> components;  // component IDs (value) ordered by size (key)
+
 };
 
 std::istream& operator>>(std::istream& is, Box& b);

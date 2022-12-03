@@ -100,6 +100,29 @@ double Box::get_extensions(int axis) {
    return this->extension[axis];
 }
 
+void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc){
+// Allocate spheres to the pbc with an approxiomate equal distribution of same sized spheres
+    for (std::map<double,int>::iterator iter = this->components.begin(); iter != this->components.end(); ++iter){
+        int x = 0, y = 0, z = 0;
+        if (x == 4){
+            y++;
+            x = 0;
+        }
+        if (y == 4){
+            z++;
+            y = 0;
+        }
+        if (z == 4){
+            z = 0;
+        }
+        pbc[x][y][z].particles.push_back(std::vector<Sphere>());
+        int cid = pbc[x][y][z].particles.size();
+        pbc[x][y][z].particles.push_back(this->particles[iter -> second]);
+        x++;
+    }
+}
+
+
 
 // create component, return cid
 int Box::add_component(double sphere_size)
