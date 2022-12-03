@@ -104,15 +104,15 @@ void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int 
 // Allocate spheres to the pbc with an approxiomate equal distribution of same sized spheres
     int x = 0, y = 0, z = 0;
     for (std::map<double,int>::iterator iter = this->components.begin(); iter != this->components.end(); ++iter){
-        if (x == dim-1){
+        if (x == dim){
             y++;
             x = 0;
         }
-        if (y == dim-1){
+        if (y == dim){
             z++;
             y = 0;
         }
-        if (z == dim-1){
+        if (z == dim){
             z = 0;
         }
         pbc[x][y][z].particles.push_back(std::vector<Sphere>());
@@ -122,6 +122,15 @@ void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int 
     }
 }
 
+void Box::copy_spheres(Box* other){
+   std::vector< std::vector<Sphere> >::iterator row;
+   std::vector<Sphere>::iterator col;
+    for (row = other->particles.begin(); row != other->particles.end(); row++) {
+    for (col = row->begin(); col != row->end(); col++) {
+        
+    }
+}
+}
 
 
 // create component, return cid
@@ -132,6 +141,7 @@ int Box::add_component(double sphere_size)
    this->particles.push_back(std::vector<Sphere>());
    return cid;
 }
+
 
    
 // create particle, return cid
