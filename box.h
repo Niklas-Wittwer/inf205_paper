@@ -27,7 +27,7 @@ public:
    }
 
    double get_extensions(int axis);
-   void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc);
+   void allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int dim);
 
 
    int add_component(double sphere_size);  // create component, return cid

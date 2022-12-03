@@ -16,7 +16,7 @@ int main(Box original) {
     create_pbc(original, pbc, dim_pbc);
     std::cout <<"num overlaps in pbc1 " <<pbc[0][0][0].count_overlaps();
     //monte carlo
-
+    monte_carlo(pbc);
     //move spheres in original box
 
 }
