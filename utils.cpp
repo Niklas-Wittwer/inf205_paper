@@ -31,7 +31,7 @@ void create_pbc(Box origin, std::vector<std::vector<std::vector<Box>>>& pbc, int
 void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc){   
 }
 
-void move_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int start, int end){
+void move_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int start, int end, double size, int dim){
         int z1 = (int)start/16;
         int y1 = (int)(start-z1*16)/4;
         int x1 = start-y1*4-z1*16;
@@ -39,7 +39,7 @@ void move_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int start, in
         int z = (int)i/16;
         int y = (int)(i-z*16)/4;
         int x = i-y*4-z*16;
-        pbc[x][y][z].copy_spheres(&pbc[x1][y1][z1]);
+        pbc[x1][y1][z1].copy_spheres(&pbc[x][y][z], size/dim*(x1-x), size/dim*(y1-y), size/dim*(z1-z));
     }
 }
 //double rand_pos(double xlim, double ylim, double zlim){}

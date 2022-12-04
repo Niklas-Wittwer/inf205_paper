@@ -122,15 +122,19 @@ void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int 
     }
 }
 
-void Box::copy_spheres(Box* other){
-   std::vector< std::vector<Sphere> >::iterator row;
-   std::vector<Sphere>::iterator col;
-    for (row = other->particles.begin(); row != other->particles.end(); row++) {
-    for (col = row->begin(); col != row->end(); col++) {
-        
-    }
+void Box::copy_spheres(Box* other, double dx, double dy, double dz){
+   assert(this->particles.size() == other->particles.size());
+   double dist[3] = {dx, dy, dz};    
+   for (int i = 0; i < this->particles.size(); i++){
+   for (int j = 0; j < this->particles[i].size(); j++){
+      for (int k = 0; k < 3; k++){
+         double coord = this->particles[i][j].get_coordinate(k) + dist[k];
+         other->particles[i][j].set_coordinate(k, coord);
+      } 
+   }
+   }
 }
-}
+
 
 
 // create component, return cid

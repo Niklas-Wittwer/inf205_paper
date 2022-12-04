@@ -28,7 +28,7 @@ public:
 
    double get_extensions(int axis);
    void allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int dim);
-   void copy_spheres(Box* other);
+   void copy_spheres(Box* other, double dx, double dy, double dz);
 
    int add_component(double sphere_size);  // create component, return cid
    int add_particle(size_t pid, double sphere_size, double q[3]);  // create particle, return cid
