@@ -5,6 +5,8 @@
 
 /*
 This code is built upon the benchmarking files given by the lecturer
+Custom functions are created to build upon the given structure to maintain a 
+high level code
 */
 
 void Box::in(std::istream* source)
@@ -144,10 +146,11 @@ for (int i = 0; i < this->particles.size(); i++){
 
       }
    }
-   std::cout <<"num overlaps in pbc " <<this->count_overlaps();
    }
+std::cout <<"num overlaps in pbc " <<this->count_overlaps();
 //Check overlaps with current positions
 int curr_overlaps = this->count_overlaps();
+std::cout << "\nHmm seems like we have "<<curr_overlaps<<" overlaps";
 for (int n = 0; n < n_attempts; n++){
    // Give each particle random positions within the limits of the sub cube
    for (int i = 0; i < temp_container.particles.size(); i++){
@@ -166,6 +169,7 @@ for (int n = 0; n < n_attempts; n++){
    // Change position of original spheres if the container found a better solution
    temp_container.copy_spheres(this);
 }
+std::cout <<"\n Hey we got to the end of one optimization (probably never gonna happen)";
 }
 
 void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int dim){

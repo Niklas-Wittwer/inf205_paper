@@ -7,6 +7,7 @@
 #include <cassert>
 /*
 Main runfile for the algorithm
+
 */
 
 
@@ -24,8 +25,8 @@ int main(int argc, char** argv) {
     create_pbc(original, pbc, dim_pbc);
     //monte carlo algorithm
     monte_carlo(pbc, original.get_extensions(0)/dim_pbc);
-
-    std::string output_name = "benchmark-configuration.dat";
+    std::cout <<"\nIt's over, Anakin\n";
+    std::string output_name = "algo-configuration.dat";
     // file output for benchmarking
     std::ofstream fout(output_name);
     if(!fout) return EXIT_FAILURE;
