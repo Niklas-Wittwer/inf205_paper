@@ -29,39 +29,36 @@ void create_pbc(Box origin, std::vector<std::vector<std::vector<Box>>>& pbc, int
 }
 
 void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc, double cube_len){
-    int x=0, y=0, z=0, x1=0, y1=0, z1=0;
+    int x=1, y=0, z=0, x1=0, y1=0, z1=0;
     int start=0;
     int end=0;
     bool next=false;
     int ax[3] = {x, y, z};
-    pbc[x][y][z].optimize(ax, 100, cube_len);
-    while (x1 != pbc.size()){
-
-    }
-// CHECK LOGIC, cubes may be skipped
-    for (int i=x1; i < pbc.size(); i++){
-        for (int j=y1; j < pbc[i].size(); j++){
-            for (int k=z1; k < pbc[j].size(); k++){
-                if(pbc[x][y][z].check_sim(pbc[i][j][k])){
+    pbc[0][0][0].optimize(ax, 100, cube_len);
+    while (end <= std::pow(pbc.size(),3)){
+        if (x1 == pbc.size()){
+            y1++;
+            x = 0;
+        }
+        if (y1 == pbc.size()){
+            z1++;
+            y1 = 0;
+        }
+        
+        if (z1 == pbc.size()){
+            move_spheres(pbc, start, end, cube_len);
+            break;
+        }
+        if(pbc[x][y][z].check_sim(pbc[x1][y1][z1])){
                     end++;
                 }
-                else {
-                    next = true;
-                    x = i, y=j, z=k;
-                    x1=i, y1=j, z1=k+1;
-                    break;
-                }
-            }
-            if(next){
-                break;
-            }
-        }
-        if (next);{
+        else {
             move_spheres(pbc, start, end, cube_len);
+            start = end;
+            x = x1, y=y1, z=z1;
             pbc[x][y][z].optimize(ax, 100, cube_len);
-            next = false;
-            continue;
         }
+        x1++;
     }
 }
 

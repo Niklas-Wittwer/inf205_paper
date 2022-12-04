@@ -197,7 +197,6 @@ void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int 
         }
         // Adding all spheres of same size to the same inner vector
         pbc[x][y][z].particles[n].push_back(this->particles[i][j]);
-        pbc[x][y][z].particles[n][0].set_coordinate(2, 2);
         x++;
         }
       n++;
