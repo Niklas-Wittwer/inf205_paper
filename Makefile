@@ -5,8 +5,8 @@ run: evaluate-confguration generator
 generator: generator.o sphere.o box.o algo.o utils.o
 	g++ -g3 -O1 -o generator generator.o sphere.o box.o algo.o utils.o
 
-evaluate-confguration: evaluate-configuration.o sphere.o box.o 
-	g++ -g3 -O1 -o evaluate-confguration evaluate-configuration.o sphere.o box.o
+evaluate-confguration: evaluate-configuration.o sphere.o box.o algo.o utils.o
+	g++ -g3 -O1 -o evaluate-confguration evaluate-configuration.o sphere.o box.o algo.o utils.o
 
 %.o: %.cpp
 	g++ -g3 -O1 -c -std=c++17 -o $@ $<

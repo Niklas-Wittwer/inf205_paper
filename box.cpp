@@ -1,6 +1,7 @@
 #include "box.h"
 #include <cassert>
 #include <math.h>
+#include "utils.h"
 
 /*
 This code is built upon the benchmarking files given by the lecturer
@@ -101,7 +102,7 @@ double Box::get_extensions(int axis) {
    return this->extension[axis];
 }
 
-void Box::copy_spheres(Box* other, double dx, double dy, double dz){
+void Box::copy_spheres(Box* other, double dx=0, double dy=0, double dz=0){
    assert(this->particles.size() == other->particles.size());
    double dist[3] = {dx, dy, dz};    
    for (int i = 0; i < this->particles.size(); i++){
@@ -114,10 +115,55 @@ void Box::copy_spheres(Box* other, double dx, double dy, double dz){
    }
 }
 
+bool Box::check_sim(Box other){
+   if (this->particles.size() != other.particles.size()){
+      return false;
+   }
+   for (int i = 0; i < this->particles.size(); i++) {
+   if (this->particles[i].size() != other.particles[i].size()){
+      return false;
+   }
+   }
+   return true;
+}
+
+void Box::optimize(int ax[3], int n_attempts, double cube_len){
+// Copy spheres to the temporary container for the spheres
+Box temp_container;
+for (int i = 0; i < this->particles.size(); i++){
+   temp_container.particles.push_back(std::vector<Sphere>());
+   for (int j = 0; j < this->particles[i].size(); j++){
+      double q[3] = {0, 0, 0};
+      temp_container.particles[i].push_back(Sphere(0, this->particles[i][j].get_size(), q));
+   }
+   }
+//Check overlaps with current positions
+int curr_overlaps = this->count_overlaps();
+for (int n = 0; n < n_attempts; n++){
+   // Give each particle random positions within the limits of the sub cube
+   for (int i = 0; i < temp_container.particles.size(); i++){
+   for (int j = 0; j < temp_container.particles[i].size(); j++){
+      for (int k = 0; k < 3; k++){
+         double lower_lim = ax[k]*cube_len + this->particles[i][j].get_size()/2;
+         double upper_lim = (ax[k]+1)*cube_len - this->particles[i][j].get_size()/2;
+         temp_container.particles[i][j].set_coordinate(k, rand_num(lower_lim, upper_lim));
+      }
+   }
+   }
+   // Check if the new cube is a more optimal solution, if not go to next iteration
+   if (temp_container.count_overlaps() > curr_overlaps){
+      continue;
+   }
+   // Change position of original spheres if the container found a better solution
+   temp_container.copy_spheres(this);
+}
+}
+
 void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int dim){
 // Allocate spheres to the pbc with an approxiomate equal distribution of same sized spheres
     int x = 0, y = 0, z = 0, n = 0;
     for (int i = 0; i < this->particles.size(); i++){
+      // Counter to iterate through the pbc, a virtual n_dim * n_dim * n_dim cube
       for (int i=0; i < pow(dim, 3); i++){
          if (x == dim){
             y++;
@@ -131,6 +177,7 @@ void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int 
         if (z == dim){
             z = 0;
         }
+        // Adding an outer vector field to each sub cube for each sphere size
         pbc[x][y][z].particles.push_back(std::vector<Sphere>());
         x++;
         }
@@ -148,7 +195,9 @@ void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int 
         if (z == dim){
             z = 0;
         }
+        // Adding all spheres of same size to the same inner vector
         pbc[x][y][z].particles[n].push_back(this->particles[i][j]);
+        pbc[x][y][z].particles[n][0].set_coordinate(2, 2);
         x++;
         }
       n++;

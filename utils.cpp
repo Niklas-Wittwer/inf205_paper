@@ -28,10 +28,44 @@ void create_pbc(Box origin, std::vector<std::vector<std::vector<Box>>>& pbc, int
 
 }
 
-void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc){   
+void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc, double cube_len){
+    int x=0, y=0, z=0, x1=0, y1=0, z1=0;
+    int start=0;
+    int end=0;
+    bool next=false;
+    int ax[3] = {x, y, z};
+    pbc[x][y][z].optimize(ax, 100, cube_len);
+    while (x1 != pbc.size()){
+
+    }
+// CHECK LOGIC, cubes may be skipped
+    for (int i=x1; i < pbc.size(); i++){
+        for (int j=y1; j < pbc[i].size(); j++){
+            for (int k=z1; k < pbc[j].size(); k++){
+                if(pbc[x][y][z].check_sim(pbc[i][j][k])){
+                    end++;
+                }
+                else {
+                    next = true;
+                    x = i, y=j, z=k;
+                    x1=i, y1=j, z1=k+1;
+                    break;
+                }
+            }
+            if(next){
+                break;
+            }
+        }
+        if (next);{
+            move_spheres(pbc, start, end, cube_len);
+            pbc[x][y][z].optimize(ax, 100, cube_len);
+            next = false;
+            continue;
+        }
+    }
 }
 
-void move_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int start, int end, double size, int dim){
+void move_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int start, int end, double cube_len){
         int z1 = (int)start/16;
         int y1 = (int)(start-z1*16)/4;
         int x1 = start-y1*4-z1*16;
@@ -39,11 +73,18 @@ void move_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int start, in
         int z = (int)i/16;
         int y = (int)(i-z*16)/4;
         int x = i-y*4-z*16;
-        pbc[x1][y1][z1].copy_spheres(&pbc[x][y][z], size/dim*(x1-x), size/dim*(y1-y), size/dim*(z1-z));
+        pbc[x1][y1][z1].copy_spheres(&pbc[x][y][z], cube_len*(x1-x), cube_len*(y1-y), cube_len*(z1-z));
     }
 }
-//double rand_pos(double xlim, double ylim, double zlim){}
-//float rand_num(float lower_lim, float upper_lim){std::uniform_real_distribution<> distr(lower_lim, upper_lim);}
+float rand_num(float lower_lim, float upper_lim){
+    /*
+    This method for generatong random numbers is based on this code https://stackoverflow.com/a/7560564
+    */
+    std::random_device rd; // obtain a random number from hardware
+    std::mt19937 gen(rd()); // seed the generator
+    std::uniform_real_distribution<> distr(lower_lim, upper_lim); // define the range
+    return distr(gen);
+}
 
 main() {
 }

@@ -29,14 +29,17 @@ public:
    double get_extensions(int axis);
    void allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int dim);
    void copy_spheres(Box* other, double dx, double dy, double dz);
+   void optimize(int ax[3], int n_attempts, double cube_len);
+   bool check_sim(Box other);
 
    int add_component(double sphere_size);  // create component, return cid
    int add_particle(size_t pid, double sphere_size, double q[3]);  // create particle, return cid
-   
+
 private:
    double extension[3];  // size of the box
    size_t N = 0;  // total number of particles
    std::vector<std::vector<Sphere>> particles;  // maps each component ID to the spheres associated with that component
+   //std::vector<std::vector<Sphere*>> particles2; // Vector of pointers to the original spheres to be altered
    std::map<double, int, std::greater<double>> components;  // component IDs (value) ordered by size (key)
 
 };

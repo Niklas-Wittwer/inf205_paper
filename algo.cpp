@@ -22,9 +22,8 @@ int main(int argc, char** argv) {
     std::vector<std::vector<std::vector<Box>>> pbc(dim_pbc, std::vector<std::vector<Box>>(dim_pbc, std::vector<Box>(dim_pbc, Box())));
     create_pbc(original, pbc, dim_pbc);
     std::cout <<"num overlaps in pbc1 " <<pbc[0][0][0].count_overlaps();
-    //monte carlo
-    monte_carlo(pbc);
-    //move spheres in original box
+    //monte carlo algorithm
+    monte_carlo(pbc, original.get_extensions(0)/dim_pbc);
 
     std::string output_name = "benchmark-configuration.dat";
     // file output for benchmarking
