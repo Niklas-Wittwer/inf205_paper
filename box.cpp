@@ -146,7 +146,7 @@ for (int n = 0; n < n_attempts; n++){
       for (int k = 0; k < 3; k++){
          double lower_lim = ax[k]*cube_len + this->particles[i][j].get_size()/2;
          double upper_lim = (ax[k]+1)*cube_len - this->particles[i][j].get_size()/2;
-         temp_container.particles[i][j].set_coordinate(k, rand_num(lower_lim, upper_lim));
+         temp_container.particles[i][j].set_coordinate(k, rand_num_gen(lower_lim, upper_lim));
       }
    }
    }

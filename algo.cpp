@@ -3,8 +3,8 @@
 
 #include <stdio.h>
 #include <cmath>
-#include "box.h"
 #include "utils.h"
+#include <cassert>
 /*
 Main runfile for the algorithm
 */
@@ -13,6 +13,7 @@ Main runfile for the algorithm
 int main(int argc, char** argv) {
     Box original;
     // Get original box from the generator
+    assert(argc > 1);
     std::ifstream file_in(argv[1]);
     file_in >> original;
     file_in.close();
