@@ -135,6 +135,14 @@ for (int i = 0; i < this->particles.size(); i++){
    for (int j = 0; j < this->particles[i].size(); j++){
       double q[3] = {0, 0, 0};
       temp_container.particles[i].push_back(Sphere(0, this->particles[i][j].get_size(), q));
+      // move spheres/particles in the range of the cube
+      for (int k = 0; k < 3; k++){
+         double lower_lim = ax[k]*cube_len + this->particles[i][j].get_size()/2;
+         double upper_lim = (ax[k]+1)*cube_len - this->particles[i][j].get_size()/2;
+         temp_container.particles[i][j].set_coordinate(k, rand_num_gen(lower_lim, upper_lim));
+         this->particles[i][j].set_coordinate(k, rand_num_gen(lower_lim, upper_lim));
+
+      }
    }
    }
 //Check overlaps with current positions
