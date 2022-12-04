@@ -144,6 +144,7 @@ for (int i = 0; i < this->particles.size(); i++){
 
       }
    }
+   std::cout <<"num overlaps in pbc " <<this->count_overlaps();
    }
 //Check overlaps with current positions
 int curr_overlaps = this->count_overlaps();

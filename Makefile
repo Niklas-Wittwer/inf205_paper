@@ -18,4 +18,4 @@ evaluate-confguration: evaluate-configuration.o sphere.o box.o utils.o
 	g++ -g3 -O1 -c -std=c++17 -o $@ $<
 
 clean:
-	rm -f *.o evaluate-confguration.exe generator.exe benchmark-configuration.dat
+	rm -force *.o algo.exe evaluate-confguration.exe generator.exe benchmark-configuration.dat
