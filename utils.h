@@ -1,6 +1,5 @@
 #ifndef UTILS_H
 #define UTILS_H
-#include "utils.cpp"
 #include "box.h"
 /*
 Header file for functions related to our algorithm
