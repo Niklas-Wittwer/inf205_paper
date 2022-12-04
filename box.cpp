@@ -1,5 +1,6 @@
 #include "box.h"
 #include <cassert>
+#include <math.h>
 
 /*
 This code is built upon the benchmarking files given by the lecturer
@@ -100,28 +101,6 @@ double Box::get_extensions(int axis) {
    return this->extension[axis];
 }
 
-void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int dim){
-// Allocate spheres to the pbc with an approxiomate equal distribution of same sized spheres
-    int x = 0, y = 0, z = 0;
-    for (std::map<double,int>::iterator iter = this->components.begin(); iter != this->components.end(); ++iter){
-        if (x == dim){
-            y++;
-            x = 0;
-        }
-        if (y == dim){
-            z++;
-            y = 0;
-        }
-        if (z == dim){
-            z = 0;
-        }
-        pbc[x][y][z].particles.push_back(std::vector<Sphere>());
-        int cid = pbc[x][y][z].particles.size();
-        pbc[x][y][z].particles.push_back(this->particles[iter -> second]);
-        x++;
-    }
-}
-
 void Box::copy_spheres(Box* other, double dx, double dy, double dz){
    assert(this->particles.size() == other->particles.size());
    double dist[3] = {dx, dy, dz};    
@@ -134,6 +113,47 @@ void Box::copy_spheres(Box* other, double dx, double dy, double dz){
    }
    }
 }
+
+void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int dim){
+// Allocate spheres to the pbc with an approxiomate equal distribution of same sized spheres
+    int x = 0, y = 0, z = 0, n = 0;
+    for (int i = 0; i < this->particles.size(); i++){
+      for (int i=0; i < pow(dim, 3); i++){
+         if (x == dim){
+            y++;
+            x = 0;
+        }
+        if (y == dim){
+            z++;
+            y = 0;
+        }
+        
+        if (z == dim){
+            z = 0;
+        }
+        pbc[x][y][z].particles.push_back(std::vector<Sphere>());
+        x++;
+        }
+      x = 0, y = 0, z = 0;
+      for (int j = 0; j < this->particles[i].size(); j++){
+         if (x == dim){
+            y++;
+            x = 0;
+        }
+        if (y == dim){
+            z++;
+            y = 0;
+        }
+        
+        if (z == dim){
+            z = 0;
+        }
+        pbc[x][y][z].particles[n].push_back(this->particles[i][j]);
+        x++;
+        }
+      n++;
+      }
+      }    
 
 
 
