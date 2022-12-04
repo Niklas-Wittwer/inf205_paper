@@ -7,8 +7,8 @@ run: evaluate-confguration generator algo
 generator: generator.o sphere.o box.o 
 	g++ -g3 -O1 -o generator generator.o sphere.o box.o 
 
-algo: algo.o sphere.o box.o algo.o utils.o
-	g++ -g3 -O1 -o  algo.o sphere.o box.o utils.o
+algo: algo.o sphere.o box.o utils.o
+	g++ -g3 -O1 -o  algo algo.o sphere.o box.o utils.o
 
 evaluate-confguration: evaluate-configuration.o sphere.o box.o 
 	g++ -g3 -O1 -o evaluate-confguration evaluate-configuration.o sphere.o box.o 
@@ -18,4 +18,4 @@ evaluate-confguration: evaluate-configuration.o sphere.o box.o
 	g++ -g3 -O1 -c -std=c++17 -o $@ $<
 
 clean:
-	rm -f *.o evaluate-confguration generator.exe benchmark-configuration.dat
+	rm -f *.o evaluate-confguration.exe generator.exe benchmark-configuration.dat
