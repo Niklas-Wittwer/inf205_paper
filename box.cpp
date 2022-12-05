@@ -203,8 +203,8 @@ void Box::deallocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc){
    for (int x=0; x < pbc.size(); x++){
         for (int y=0; y < pbc[x].size(); y++){
             for (int z=0; z < pbc[x][y].size(); z++){
-               for(int i; i<pbc[x][y][z].particles.size(); i++){
-                  for(int j; j <pbc[x][y][z].particles[i].size(); j++){
+               for(int i=0; i<pbc[x][y][z].particles.size(); i++){
+                  for(int j=0; j <pbc[x][y][z].particles[i].size(); j++){
                      this->add_particle_pbc(pbc[x][y][z].particles[i][j]);
                   }
 
