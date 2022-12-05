@@ -1,6 +1,5 @@
 run: evaluate-confguration generator algo
 	./generator 65536
-	./evaluate-confguration benchmark-configuration.dat
 	./algo benchmark-configuration.dat
 	./evaluate-confguration algo-configuration.dat
 

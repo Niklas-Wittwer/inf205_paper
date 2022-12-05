@@ -105,12 +105,14 @@ double Box::get_extensions(int axis) {
 }
 
 void Box::copy_spheres(Box* other, double dx=0, double dy=0, double dz=0){
+   //check that sizes are equal
    assert(this->particles.size() == other->particles.size());
    double dist[3] = {dx, dy, dz};    
+   //Move the particles of input box to this box, taking in account the distance between the sub cubes
    for (int i = 0; i < this->particles.size(); i++){
    for (int j = 0; j < this->particles[i].size(); j++){
       for (int k = 0; k < 3; k++){
-         double coord = this->particles[i][j].get_coordinate(k) + dist[k];
+         double coord = std::max(this->particles[i][j].get_coordinate(k) + dist[k],(double)0);
          other->particles[i][j].set_coordinate(k, coord);
       } 
    }
@@ -118,6 +120,7 @@ void Box::copy_spheres(Box* other, double dx=0, double dy=0, double dz=0){
 }
 
 bool Box::check_sim(Box other){
+   //check if the particle vector of two boxes have the same dimension, used for copying
    if (this->particles.size() != other.particles.size()){
       return false;
    }
@@ -143,34 +146,39 @@ for (int i = 0; i < this->particles.size(); i++){
    for (int j = 0; j < this->particles[i].size(); j++){
       for (int k = 0; k < 3; k++){
          //Limit the spheres to be within the original box, but allow then to overlap with adjacent boxes in the pbc
-         double lower_lim = std::max(ax[k]*cube_len + this->particles[i][j].get_size()/8, (double)0);
-         double upper_lim = std::min((ax[k]+1)*cube_len - this->particles[i][j].get_size()/8,(double)cube_len*4);
+         double lower_lim = std::max(ax[k]*cube_len + this->particles[i][j].get_size()/4, (double)this->particles[i][j].get_size()/2);
+         double upper_lim = std::min((ax[k]+1)*cube_len - this->particles[i][j].get_size()/4,(double)cube_len*4-particles[i][j].get_size()/2);
          temp_container.particles[i][j].set_coordinate(k, rand_num_gen(lower_lim, upper_lim));
          this->particles[i][j].set_coordinate(k, rand_num_gen(lower_lim, upper_lim));
-
    }
    }
    }
 //Check overlaps with current positions
-int curr_overlaps = temp_container.count_overlaps();
+long curr_overlaps = this->count_overlaps();
+std::cout <<"\n1st overlaps: "<<curr_overlaps;
 for (int n = 0; n < n_attempts; n++){
    // Give each particle random positions within the limits of the sub cube
    for (int i = 0; i < temp_container.particles.size(); i++){
    for (int j = 0; j < temp_container.particles[i].size(); j++){
       for (int k = 0; k < 3; k++){
-         double lower_lim = ax[k]*cube_len + this->particles[i][j].get_size()/8;
-         double upper_lim = (ax[k]+1)*cube_len - this->particles[i][j].get_size()/8;
+         double lower_lim = std::max(ax[k]*cube_len + this->particles[i][j].get_size()/8, (double)this->particles[i][j].get_size()/2);
+         double upper_lim = std::min((ax[k]+1)*cube_len - this->particles[i][j].get_size()/8,(double)cube_len*4-particles[i][j].get_size()/2);
          temp_container.particles[i][j].set_coordinate(k, rand_num_gen(lower_lim, upper_lim));
       }
    }
    }
    // Check if the new cube is a more optimal solution, if not go to next iteration
-   if (temp_container.count_overlaps() > curr_overlaps){
+   long temp_overlaps = temp_container.count_overlaps();
+  if (temp_overlaps > curr_overlaps){
+      std::cout <<"\nTemp overlaps: "<<temp_overlaps;
       continue;
    }
    // Change position of original spheres if the container found a better solution
    temp_container.copy_spheres(this);
+   
+   
 }
+std::cout <<"\nFinal overlaps: "<<curr_overlaps;
 }
 
 void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int dim){
@@ -203,8 +211,8 @@ void Box::deallocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc){
    for (int x=0; x < pbc.size(); x++){
         for (int y=0; y < pbc[x].size(); y++){
             for (int z=0; z < pbc[x][y].size(); z++){
-               for(int i; i<pbc[x][y][z].particles.size(); i++){
-                  for(int j; j <pbc[x][y][z].particles[i].size(); j++){
+               for(int i=0; i<pbc[x][y][z].particles.size(); i++){
+                  for(int j=0; j <pbc[x][y][z].particles[i].size(); j++){
                      this->add_particle_pbc(pbc[x][y][z].particles[i][j]);
                   }
 
@@ -256,5 +264,5 @@ int Box::add_particle_pbc(Sphere sphere){
 void Box::clear_particles(){
    this->components.clear();
    this->particles.clear();
-   this->particles.resize(0);
+   this->particles.resize(0); // Same as clear?
 }

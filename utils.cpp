@@ -44,8 +44,8 @@ void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc, double cube_le
     /*
     This is our implementation of the monte carlo algorithm
     The first cube with n spheres will be optimized and the solution copied to the other cubes
-    with an equal amount of spheres. From the allocation, it should be at most 4 (same amount as different radii spheres) different
-    cubes
+    with an equal amount of spheres. From the allocation, it should not require that many rounds of
+    computation, but it would of course increase with an increased amount of different sized spheres
     */
     int x=1, y=0, z=0, x1=0, y1=0, z1=0;
     int start=0;
@@ -71,10 +71,11 @@ void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc, double cube_le
                     end++;
                 }
         else {
+            std::cout <<"\nxyz:"<<x<<y<<z;
             move_spheres(pbc, start, end, cube_len);
             start = end;
             x = x1, y=y1, z=z1;
-            pbc[x][y][z].optimize(ax, 100, cube_len);
+            pbc[x][y][z].optimize(ax, 200, cube_len);
         }
        x1++;
         
