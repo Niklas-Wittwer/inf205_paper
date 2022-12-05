@@ -3,7 +3,7 @@ This project uses a combination of PBC and monte carlo to reduce the number of o
 ## Usage
 This project runs on c++, and the algorithm is intended run through make in terminal (executes configurations in the MakeFile)
 
-for MakeFile clean
+for make clean, change the clean config in the MakeFile
 if on linux use:
 ```toml
     rm -f *.o *.dat algo evaluate-confguration generator

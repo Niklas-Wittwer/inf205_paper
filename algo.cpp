@@ -19,6 +19,7 @@ int main(int argc, char** argv) {
     std::ifstream file_in(argv[1]);
     file_in >> original;
     file_in.close();
+    //start timer to time the runtime of the algorithm
     auto t0 = std::chrono::high_resolution_clock::now();
 
     // Create 3d vector for pbc 

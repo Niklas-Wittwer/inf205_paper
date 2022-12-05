@@ -9,7 +9,7 @@
 
 /*
 Declaring the box class and its function
-This code is build upon the code given by the lecturer
+This code is build upon the code given by the lecturer through the benchmarking files, custom functions are added
 */
 class Box
 {
