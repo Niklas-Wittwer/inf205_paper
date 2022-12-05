@@ -28,12 +28,15 @@ public:
 
    double get_extensions(int axis);
    void allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int dim);
+   void deallocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc);
    void copy_spheres(Box* other, double dx, double dy, double dz);
    void optimize(int ax[3], int n_attempts, double cube_len);
    bool check_sim(Box other);
 
    int add_component(double sphere_size);  // create component, return cid
    int add_particle(size_t pid, double sphere_size, double q[3]);  // create particle, return cid
+   int add_particle_pbc(Sphere sphere);
+   void clear_particles();
 
 private:
    double extension[3];  // size of the box

@@ -6,6 +6,7 @@
 #include "utils.h"
 #include <cassert>
 /*
+
 Main runfile for the algorithm
 
 */
@@ -25,7 +26,10 @@ int main(int argc, char** argv) {
     create_pbc(original, pbc, dim_pbc);
     //monte carlo algorithm
     monte_carlo(pbc, original.get_extensions(0)/dim_pbc);
+    original.clear_particles();
+    original.deallocate_spheres(pbc);
     std::cout <<"\nIt's over, Anakin\n";
+    std::cout <<"You understimate my "<< original.count_overlaps() <<" overlaps \n";
     std::string output_name = "algo-configuration.dat";
     // file output for benchmarking
     std::ofstream fout(output_name);

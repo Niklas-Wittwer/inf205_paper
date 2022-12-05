@@ -64,7 +64,6 @@ void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc, double cube_le
         }
         
         if (z1 == pbc.size()){
-            std::cout <<"\n does this ever happen?";
             move_spheres(pbc, start, end, cube_len);
             break;
         }
@@ -72,14 +71,12 @@ void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc, double cube_le
                     end++;
                 }
         else {
-            std::cout <<"\n Heya, we didnt get a matching particles "<<end<<" "<<start;
             move_spheres(pbc, start, end, cube_len);
             start = end;
             x = x1, y=y1, z=z1;
             pbc[x][y][z].optimize(ax, 100, cube_len);
         }
-        std::cout<<"\n" <<x1 <<y1 <<z1 << " num overlaps: "<< pbc[x1][y1][z1].count_overlaps();
-        x1++;
+       x1++;
         
     }
 }

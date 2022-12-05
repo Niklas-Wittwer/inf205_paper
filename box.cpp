@@ -133,31 +133,33 @@ void Box::optimize(int ax[3], int n_attempts, double cube_len){
 // Copy spheres to the temporary container for the spheres
 Box temp_container;
 for (int i = 0; i < this->particles.size(); i++){
-   temp_container.particles.push_back(std::vector<Sphere>());
    for (int j = 0; j < this->particles[i].size(); j++){
-      double q[3] = {0, 0, 0};
-      temp_container.particles[i].push_back(Sphere(0, this->particles[i][j].get_size(), q));
-      // move spheres/particles in the range of the cube
+      temp_container.add_particle_pbc(this->particles[i][j]);
+   }
+   }
+   
+   // move spheres/particles in the limits of the cube
+for (int i = 0; i < this->particles.size(); i++){
+   for (int j = 0; j < this->particles[i].size(); j++){
       for (int k = 0; k < 3; k++){
-         double lower_lim = ax[k]*cube_len + this->particles[i][j].get_size()/2;
-         double upper_lim = (ax[k]+1)*cube_len - this->particles[i][j].get_size()/2;
+         //Limit the spheres to be within the original box, but allow then to overlap with adjacent boxes in the pbc
+         double lower_lim = std::max(ax[k]*cube_len + this->particles[i][j].get_size()/8, (double)0);
+         double upper_lim = std::min((ax[k]+1)*cube_len - this->particles[i][j].get_size()/8,(double)cube_len*4);
          temp_container.particles[i][j].set_coordinate(k, rand_num_gen(lower_lim, upper_lim));
          this->particles[i][j].set_coordinate(k, rand_num_gen(lower_lim, upper_lim));
 
-      }
    }
    }
-std::cout <<"num overlaps in pbc " <<this->count_overlaps();
+   }
 //Check overlaps with current positions
-int curr_overlaps = this->count_overlaps();
-std::cout << "\nHmm seems like we have "<<curr_overlaps<<" overlaps";
+int curr_overlaps = temp_container.count_overlaps();
 for (int n = 0; n < n_attempts; n++){
    // Give each particle random positions within the limits of the sub cube
    for (int i = 0; i < temp_container.particles.size(); i++){
    for (int j = 0; j < temp_container.particles[i].size(); j++){
       for (int k = 0; k < 3; k++){
-         double lower_lim = ax[k]*cube_len + this->particles[i][j].get_size()/2;
-         double upper_lim = (ax[k]+1)*cube_len - this->particles[i][j].get_size()/2;
+         double lower_lim = ax[k]*cube_len + this->particles[i][j].get_size()/8;
+         double upper_lim = (ax[k]+1)*cube_len - this->particles[i][j].get_size()/8;
          temp_container.particles[i][j].set_coordinate(k, rand_num_gen(lower_lim, upper_lim));
       }
    }
@@ -169,31 +171,13 @@ for (int n = 0; n < n_attempts; n++){
    // Change position of original spheres if the container found a better solution
    temp_container.copy_spheres(this);
 }
-std::cout <<"\n Hey we got to the end of one optimization (probably never gonna happen)";
 }
 
 void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int dim){
-// Allocate spheres to the pbc with an approxiomate equal distribution of same sized spheres
-    int x = 0, y = 0, z = 0, n = 0;
+// Allocate spheres to the pbc from the box with an approxiomate equal distribution of same sized spheres
+    
+    int x = 0, y = 0, z = 0;
     for (int i = 0; i < this->particles.size(); i++){
-      // Counter to iterate through the pbc, a virtual n_dim * n_dim * n_dim cube
-      for (int i=0; i < pow(dim, 3); i++){
-         if (x == dim){
-            y++;
-            x = 0;
-        }
-        if (y == dim){
-            z++;
-            y = 0;
-        }
-        
-        if (z == dim){
-            z = 0;
-        }
-        // Adding an outer vector field to each sub cube for each sphere size
-        pbc[x][y][z].particles.push_back(std::vector<Sphere>());
-        x++;
-        }
       x = 0, y = 0, z = 0;
       for (int j = 0; j < this->particles[i].size(); j++){
          if (x == dim){
@@ -208,15 +192,29 @@ void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int 
         if (z == dim){
             z = 0;
         }
-        // Adding all spheres of same size to the same inner vector
-        pbc[x][y][z].particles[n].push_back(this->particles[i][j]);
+       pbc[x][y][z].add_particle_pbc(this->particles[i][j]);
         x++;
         }
-      n++;
       }
-      }    
+}    
 
+void Box::deallocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc){
+   //Move spheres back to the original box
+   for (int x=0; x < pbc.size(); x++){
+        for (int y=0; y < pbc[x].size(); y++){
+            for (int z=0; z < pbc[x][y].size(); z++){
+               for(int i; i<pbc[x][y][z].particles.size(); i++){
+                  for(int j; j <pbc[x][y][z].particles[i].size(); j++){
+                     this->add_particle_pbc(pbc[x][y][z].particles[i][j]);
+                  }
 
+               }
+               // remove sphere copies from pbc
+              pbc[x][y][z].clear_particles();
+        }
+    }
+    }
+}
 
 // create component, return cid
 int Box::add_component(double sphere_size)
@@ -241,4 +239,22 @@ int Box::add_particle(size_t pid, double sphere_size, double q[3])
          
    this->particles[cid].push_back(Sphere(pid, sphere_size, q));
    return cid;
+}
+
+int Box::add_particle_pbc(Sphere sphere){
+   this->N++;
+      
+   int cid = 0;
+   auto comp = this->components.find(sphere.get_size());
+   if(comp != this->components.end()) cid = comp->second;
+   else cid = this->add_component(sphere.get_size());
+         
+   this->particles[cid].push_back(sphere);
+   return cid;
+}
+
+void Box::clear_particles(){
+   this->components.clear();
+   this->particles.clear();
+   this->particles.resize(0);
 }
