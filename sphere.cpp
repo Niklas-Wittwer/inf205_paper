@@ -2,7 +2,10 @@
 #include <iostream>
 
 #include "sphere.h"
-
+/*
+Functions related to the sphere object
+Given by the benchmarking files from the lecturer
+*/
 double Sphere::get_coordinate(int axis) const
 {
    assert((axis == 0) || (axis == 1) || (axis == 2));

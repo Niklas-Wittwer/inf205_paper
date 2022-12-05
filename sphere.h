@@ -2,7 +2,10 @@
 #define COLLISIONS_STRUCT_H
 
 #include <cstddef>
-
+/*
+class for the spheres
+Given by the benchmarking files from the lecturer
+*/
 class Sphere
 {
 public:

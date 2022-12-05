@@ -8,7 +8,9 @@
 #include <string>
 
 #include "box.h"
-
+/*
+Generator from the benchmarking files given by the lecturer
+*/
 // ./generator <N> <packing_fraction> <outfile> <max_ratio>
 //
 // default for packing fraction is 7/9

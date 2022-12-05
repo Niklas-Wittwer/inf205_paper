@@ -5,6 +5,10 @@
 
 #include "box.h"
 #include "sphere.h"
+/*
+Evaluate overlaps in the box
+From benchmarking files given by the lecturer
+*/
 
 int main(int argc, char** argv)
 {
