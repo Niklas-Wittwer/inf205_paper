@@ -10,12 +10,6 @@ high level code
 */
 
 void Box::in(std::istream* source)
-/*
-   Class for ..............
-
-   input:
-   
-*/
 {
    // first input size of the box
    double x, y, z;
@@ -60,11 +54,7 @@ std::istream& operator>>(std::istream& is, Box& b) {
 }
 
 void Box::out(std::ostream* target)
-/*
 
-   input:
-
-*/
 {
    *target << this->extension[0] << " " << this->extension[1] << " " << this->extension[2] << "\n";
    
@@ -88,6 +78,11 @@ std::ostream& operator<<(std::ostream& os, Box& b) {
 // normal overlaps count as 1, if the inner shielding is broken it counts as 8
 //
 long Box::count_overlaps()
+/*
+Function to count overlaps in a box
+Output:
+long overlaps: Number of overlaps
+*/
 {
    long overlaps = 0;
    
@@ -109,20 +104,28 @@ long Box::count_overlaps()
    return overlaps;
 }
 
-// Get original box extensions to create sub boxes
+
 double Box::get_extensions(int axis) {
+   /*
+   Get original box extensions to create sub boxes
+   Input: 
+   int axis: Which axis to get the length/extension of
+   Output:
+   double extension[axis]: length of axis
+   */
    assert((axis == 0) || (axis == 1) || (axis == 2));
    return this->extension[axis];
 }
 
 void Box::copy_spheres(Box* other, double dx=0, double dy=0, double dz=0){
    /*
-   Function for copying spheres, 
+   Function for copying the position of the spheres from one box object to another with respect to the distance between the boxes
+   This does not change the structure of either of the boxes, and assumes equal structure of the particles vector
    input:
-   Box other: Box to copy spheres from?
-   double dx: 
-   double dy:
-   double dz:
+   Box other: Box to copy spheres to
+   double dx: Distance from this box to other in x
+   double dy: Distance from this box to other in y
+   double dz: Distance from this box to other in z
    */
    assert(this->particles.size() == other->particles.size());
    double dist[3] = {dx, dy, dz};    
@@ -138,10 +141,10 @@ void Box::copy_spheres(Box* other, double dx=0, double dy=0, double dz=0){
 
 bool Box::check_sim(Box other){
    /*
-   Function for checking if one sphere is the same size as another
+   Function for checking if one box has the same particle structure as another
 
    input:
-   Box other: sub-box to iterate through
+   Box other: box to compare with
    */
    if (this->particles.size() != other.particles.size()){
       return false;
@@ -156,11 +159,12 @@ bool Box::check_sim(Box other){
 
 void Box::optimize(int ax[3], int n_attempts, double cube_len){
    /*
-   Function for optimizing sphere placement
+   Function for optimizing sphere placement in a sub box. 
+   The spheres are given a random position within the range of the sub box
    input:
-   int ax[3]:
-   int n_attempts:
-   double cube_len:
+   int ax[3]: vector for position in pbc, used to 
+   int n_attempts: number of randomizations with monte carlo
+   double cube_len: length of the side of one sub box
    */
 std::cout<<"\nxyz: ";
 for (int i = 0; i<3; i++){
@@ -232,9 +236,10 @@ std::cout <<"\n Final overlaps: "<<curr_overlaps;
 void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int dim){
 /*
 Allocate spheres to the pbc from the box with an approxiomate equal distribution of same sized spheres
-
+Inherits the structure of the particle vector and components map with respect to the original box
 input:
-
+vector<<<Box>>> pbc: 3d vector with box objects representing the pbc
+int dim: Dimension of the 3d vector
 */ 
    
    
@@ -261,7 +266,11 @@ input:
 }    
 
 void Box::deallocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc){
-   //Move spheres back to the original box
+   /*
+   Move spheres back to the original box and remove the copies from the sub boxes
+   Input: 
+   vector<<<Box>>> pbc: 3d vector with box objects representing the pbc
+   */
    for (int x=0; x < pbc.size(); x++){
         for (int y=0; y < pbc[x].size(); y++){
             for (int z=0; z < pbc[x][y].size(); z++){
@@ -304,6 +313,11 @@ int Box::add_particle(size_t pid, double sphere_size, double q[3])
 }
 
 int Box::add_particle_pbc(Sphere sphere){
+   /*
+   Add a copy of an already existing sphere
+   Input:
+   Sphere sphere: Sphere object
+   */
    this->N++;
       
    int cid = 0;
