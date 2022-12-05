@@ -10,6 +10,14 @@ Utility functions for our algorithm
 */
 
 void create_pbc(Box origin, std::vector<std::vector<std::vector<Box>>>& pbc, int dim){
+    /*
+    This function copies the spheres from the original box to the sub boxes while inheriting the structure and logic with the components map and the 2d particles vector
+    
+    input:
+    Box origin: Box to copy spheres from
+    vector<<<spheres>>> pbc: 3d vector with box objects
+    int dim: dimensions of the 3d vector
+    */
     // Get size from original box and set sizes of sub boxes
     float dx = origin.get_extensions(0)/dim; 
     float dy = origin.get_extensions(1)/dim; 
@@ -29,6 +37,15 @@ void create_pbc(Box origin, std::vector<std::vector<std::vector<Box>>>& pbc, int
 }
 
 void move_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int start, int end, double cube_len){
+    /*
+    Copying the position of the spheres from the start element in pbc to the following elements/boxes. 
+    Start and end are translated to 3d coordinates assuming a 4x4x4 3d vector (sub cube/box)
+    input:
+    vector<<<spheres>>> pbc: 3d vector with box objects
+    int start: start element to be translated to 3d, min 0 and max 63
+    int end: End element to be translated to 3d
+    double cube_len: length the sub box/cube
+    */
         int z1 = (int)start/16;
         int y1 = (int)(start-z1*16)/4;
         int x1 = start-y1*4-z1*16;
@@ -46,6 +63,9 @@ void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc, double cube_le
     The first cube with n spheres will be optimized and the solution copied to the other cubes
     with an equal amount of spheres. From the allocation, it should be at most 4 (same amount as different radii spheres) different
     cubes
+    input:
+    vector<<<spheres>>> pbc: 3d vector with box objects
+    double cube_len: length the sub box/cube
     */
     int x=1, y=0, z=0, x1=0, y1=0, z1=0;
     int start=0;
@@ -87,6 +107,10 @@ void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc, double cube_le
 double rand_num_gen(double lower_lim, double upper_lim){
     /*
     This method for generatong random numbers is based on this code https://stackoverflow.com/a/7560564
+    lower and upper limit are inclusive
+    Input:
+    double lower_lim: lower bound of the  generation
+    double upper_lim: upper bound of the generation
     */
     std::random_device rd; // obtain a random number from hardware
     std::mt19937 gen(rd()); // seed the generator
