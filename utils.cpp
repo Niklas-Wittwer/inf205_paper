@@ -111,6 +111,8 @@ double rand_num_gen(double lower_lim, double upper_lim){
     Input:
     double lower_lim: lower bound of the  generation
     double upper_lim: upper bound of the generation
+    Output:
+    double distr: random float/double between the lower and upper limit
     */
     std::random_device rd; // obtain a random number from hardware
     std::mt19937 gen(rd()); // seed the generator
