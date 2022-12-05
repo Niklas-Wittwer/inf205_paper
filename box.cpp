@@ -130,6 +130,10 @@ bool Box::check_sim(Box other){
 }
 
 void Box::optimize(int ax[3], int n_attempts, double cube_len){
+std::cout<<"\nxyz: ";
+for (int i = 0; i<3; i++){
+   std::cout<<ax[i];
+}
 
 Box temp_container;
 for (int i = 0; i < this->particles.size(); i++){
@@ -167,15 +171,18 @@ for (int n = 0; n < n_attempts; n++){
    }
    // Check if the new cube is a more optimal solution, if not go to next iteration
    long temp_overlaps = temp_container.count_overlaps();
+   /*
    if (temp_overlaps==0){
       for (int i = 0; i < temp_container.particles.size(); i++){
          for (int j = 0; j < temp_container.particles[i].size(); j++){
             for (int k = 0; k < 3; k++){
                std::cout <<k <<": "<<temp_container.particles[i][j].get_coordinate(k);
    }
+   std::cout <<"\n";
+   
    }
    }
-   }
+   }*/
    if (temp_overlaps >= curr_overlaps){
       continue;
    }
