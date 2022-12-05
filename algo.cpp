@@ -1,36 +1,46 @@
 #include <iostream>
 #include <fstream>
-
+#include <chrono>
 #include <stdio.h>
 #include <cmath>
+
 #include "utils.h"
 #include <cassert>
 /*
-
+    rm -f *.o *.dat algo evaluate-confguration generator
+	./evaluate-confguration benchmark-configuration.dat
 Main runfile for the algorithm
-
+THE RANDOM GENERATOR IS SEEDED, pls remove before delivery. I'm sorry if you see this, Martin Horsch
 */
 
 
 int main(int argc, char** argv) {
+
     Box original;
     // Get original box from the generator
     assert(argc > 1);
     std::ifstream file_in(argv[1]);
     file_in >> original;
     file_in.close();
+    auto t0 = std::chrono::high_resolution_clock::now();
 
     // Create 3d vector for pbc 
     int dim_pbc = 4;
-    std::vector<std::vector<std::vector<Box>>> pbc(dim_pbc, std::vector<std::vector<Box>>(dim_pbc, std::vector<Box>(dim_pbc, Box())));
+    std::vector<std::vector<std::vector<Box>>> pbc(dim_pbc, std::vector<std::vector<Box>>(dim_pbc, std::vector<Box>(dim_pbc, Box()))); //initialize 3d vector with dim_pb as dimensions in x y z 
+    //allocate spheres from the input box to the pbc
     create_pbc(original, pbc, dim_pbc);
+
     //monte carlo algorithm
     monte_carlo(pbc, original.get_extensions(0)/dim_pbc);
+    //clear original box and deallocate spheres
     original.clear_particles();
     original.deallocate_spheres(pbc);
-    std::cout <<"\nIt's over, Anakin\n";
-    std::cout <<"You understimate my "<< original.count_overlaps() <<" overlaps \n";
+
+    auto t1 = std::chrono::high_resolution_clock::now();
+    auto delta_t01 = std::chrono::duration_cast<std::chrono::microseconds>(t1-t0).count();
+    std::cout << "\nRuntime algorithm:\t" << 1.0e-06*delta_t01 << " s\n";
     std::string output_name = "algo-configuration.dat";
+
     // file output for benchmarking
     std::ofstream fout(output_name);
     if(!fout) return EXIT_FAILURE;
@@ -39,5 +49,3 @@ int main(int argc, char** argv) {
     std::cout << "\nDone.\n\n";
 
 }
-
-
