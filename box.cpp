@@ -130,7 +130,7 @@ bool Box::check_sim(Box other){
 }
 
 void Box::optimize(int ax[3], int n_attempts, double cube_len){
-// Copy spheres to the temporary container for the spheres
+
 Box temp_container;
 for (int i = 0; i < this->particles.size(); i++){
    for (int j = 0; j < this->particles[i].size(); j++){
@@ -152,25 +152,41 @@ for (int i = 0; i < this->particles.size(); i++){
    }
    }
 //Check overlaps with current positions
-int curr_overlaps = temp_container.count_overlaps();
+long curr_overlaps = temp_container.count_overlaps(); //!!!!!!!!!!!!!!
+std::cout << "\n 1st overlaps: "<< curr_overlaps;
 for (int n = 0; n < n_attempts; n++){
    // Give each particle random positions within the limits of the sub cube
    for (int i = 0; i < temp_container.particles.size(); i++){
    for (int j = 0; j < temp_container.particles[i].size(); j++){
       for (int k = 0; k < 3; k++){
-         double lower_lim = ax[k]*cube_len + this->particles[i][j].get_size()/8;
-         double upper_lim = (ax[k]+1)*cube_len - this->particles[i][j].get_size()/8;
+         double lower_lim = std::max(ax[k]*cube_len + this->particles[i][j].get_size()/8, (double)0);
+         double upper_lim = std::min((ax[k]+1)*cube_len - this->particles[i][j].get_size()/8,(double)cube_len*4);
          temp_container.particles[i][j].set_coordinate(k, rand_num_gen(lower_lim, upper_lim));
       }
    }
    }
    // Check if the new cube is a more optimal solution, if not go to next iteration
-   if (temp_container.count_overlaps() > curr_overlaps){
+   long temp_overlaps = temp_container.count_overlaps();
+   if (temp_overlaps==0){
+      for (int i = 0; i < temp_container.particles.size(); i++){
+         for (int j = 0; j < temp_container.particles[i].size(); j++){
+            for (int k = 0; k < 3; k++){
+               std::cout <<k <<": "<<temp_container.particles[i][j].get_coordinate(k);
+   }
+   }
+   }
+   }
+   if (temp_overlaps >= curr_overlaps){
       continue;
    }
    // Change position of original spheres if the container found a better solution
+   std::cout <<"\n Moving spheres";
+   std::cout <<"\ntemp_overlaps: "<<temp_overlaps;
+   curr_overlaps = temp_overlaps;
    temp_container.copy_spheres(this);
+
 }
+std::cout <<"\n Final overlaps: "<<curr_overlaps;
 }
 
 void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int dim){
@@ -203,8 +219,8 @@ void Box::deallocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc){
    for (int x=0; x < pbc.size(); x++){
         for (int y=0; y < pbc[x].size(); y++){
             for (int z=0; z < pbc[x][y].size(); z++){
-               for(int i; i<pbc[x][y][z].particles.size(); i++){
-                  for(int j; j <pbc[x][y][z].particles[i].size(); j++){
+               for(int i=0; i<pbc[x][y][z].particles.size(); i++){
+                  for(int j=0; j <pbc[x][y][z].particles[i].size(); j++){
                      this->add_particle_pbc(pbc[x][y][z].particles[i][j]);
                   }
 
@@ -257,4 +273,5 @@ void Box::clear_particles(){
    this->components.clear();
    this->particles.clear();
    this->particles.resize(0);
+   this->N = 0;
 }
