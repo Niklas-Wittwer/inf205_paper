@@ -52,7 +52,7 @@ void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc, double cube_le
     int end=0;
     bool next=false;
     int ax[3] = {x1, y1, z1};
-    pbc[0][0][0].optimize(ax, 200, cube_len);
+    pbc[0][0][0].optimize(ax, 300, cube_len);
     while (end <= std::pow(pbc.size(),3)){
         if (x1 == pbc.size()){
             y1++;
@@ -75,7 +75,7 @@ void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc, double cube_le
             start = end;
             ax[0] = x1, ax[1]=y1, ax[2]=z1;
             x = x1, y=y1, z=z1;
-            pbc[x][y][z].optimize(ax, 200, cube_len);
+            pbc[x][y][z].optimize(ax, 300, cube_len);
             
         }
        x1++;

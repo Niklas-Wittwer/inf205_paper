@@ -156,8 +156,8 @@ for (int i = 0; i < this->particles.size(); i++){
    }
    }
 //Check overlaps with current positions
-long curr_overlaps = temp_container.count_overlaps(); //!!!!!!!!!!!!!!
-std::cout << "\n 1st overlaps: "<< curr_overlaps;
+long curr_overlaps = temp_container.count_overlaps(); 
+std::cout << "\n 1st overlaps: "<< curr_overlaps; 
 for (int n = 0; n < n_attempts; n++){
    // Give each particle random positions within the limits of the sub cube
    for (int i = 0; i < temp_container.particles.size(); i++){
@@ -171,18 +171,18 @@ for (int n = 0; n < n_attempts; n++){
    }
    // Check if the new cube is a more optimal solution, if not go to next iteration
    long temp_overlaps = temp_container.count_overlaps();
-   /*
-   if (temp_overlaps==0){
-      for (int i = 0; i < temp_container.particles.size(); i++){
-         for (int j = 0; j < temp_container.particles[i].size(); j++){
-            for (int k = 0; k < 3; k++){
-               std::cout <<k <<": "<<temp_container.particles[i][j].get_coordinate(k);
-   }
-   std::cout <<"\n";
    
+   /*
+   Some boxes get 0 overlaps. Should not be possible considering the number of spheres and volume of cube/sub cubes?
+   if (temp_overlaps==0){
+      std::cout << "\n limits of the cube: " << ax[0]*cube_len <<"-"<<(ax[0]+1)*cube_len<<" "<<ax[1]*cube_len <<"-"<<(ax[1]+1)*cube_len<<" "<<ax[2]*cube_len <<"-"<<(ax[2]+1)*cube_len;
+      for (int i = 0; i < temp_container.particles.size(); i++){
+         for(int j=0;j<temp_container.particles[i].size();j++){
+            std::cout<<"\nxyz : "<<temp_container.particles[i][j].get_coordinate(0)<< ", "<<temp_container.particles[i][j].get_coordinate(1)<< ", "<<temp_container.particles[i][j].get_coordinate(2);
+         }
    }
    }
-   }*/
+   */
    if (temp_overlaps >= curr_overlaps){
       continue;
    }

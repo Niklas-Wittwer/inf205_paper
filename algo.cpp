@@ -7,8 +7,12 @@
 #include "utils.h"
 #include <cassert>
 /*
+for MakeFile clean
+if on linux use:
     rm -f *.o *.dat algo evaluate-confguration generator
-	./evaluate-confguration benchmark-configuration.dat
+if on windows use:
+    del *.exe *.dat *.o algo evaluate-confguration generator
+	
 Main runfile for the algorithm
 THE RANDOM GENERATOR IS SEEDED, pls remove before delivery. I'm sorry if you see this, Martin Horsch
 */

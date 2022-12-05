@@ -18,4 +18,5 @@ evaluate-confguration: evaluate-configuration.o sphere.o box.o utils.o
 	g++ -g3 -O1 -c -std=c++17 -o $@ $<
 
 clean:
-	rm -f *.o *.dat algo evaluate-confguration generator
+	del *.exe *.dat *.o algo evaluate-confguration generator
+	
