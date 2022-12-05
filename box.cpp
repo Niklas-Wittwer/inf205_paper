@@ -10,6 +10,12 @@ high level code
 */
 
 void Box::in(std::istream* source)
+/*
+   Class for ..............
+
+   input:
+   
+*/
 {
    // first input size of the box
    double x, y, z;
@@ -54,6 +60,11 @@ std::istream& operator>>(std::istream& is, Box& b) {
 }
 
 void Box::out(std::ostream* target)
+/*
+
+   input:
+
+*/
 {
    *target << this->extension[0] << " " << this->extension[1] << " " << this->extension[2] << "\n";
    
@@ -105,6 +116,14 @@ double Box::get_extensions(int axis) {
 }
 
 void Box::copy_spheres(Box* other, double dx=0, double dy=0, double dz=0){
+   /*
+   Function for copying spheres, 
+   input:
+   Box other: Box to copy spheres from?
+   double dx: 
+   double dy:
+   double dz:
+   */
    assert(this->particles.size() == other->particles.size());
    double dist[3] = {dx, dy, dz};    
    for (int i = 0; i < this->particles.size(); i++){
@@ -118,6 +137,12 @@ void Box::copy_spheres(Box* other, double dx=0, double dy=0, double dz=0){
 }
 
 bool Box::check_sim(Box other){
+   /*
+   Function for checking if one sphere is the same size as another
+
+   input:
+   Box other: sub-box to iterate through
+   */
    if (this->particles.size() != other.particles.size()){
       return false;
    }
@@ -130,11 +155,19 @@ bool Box::check_sim(Box other){
 }
 
 void Box::optimize(int ax[3], int n_attempts, double cube_len){
+   /*
+   Function for optimizing sphere placement
+   input:
+   int ax[3]:
+   int n_attempts:
+   double cube_len:
+   */
 std::cout<<"\nxyz: ";
 for (int i = 0; i<3; i++){
    std::cout<<ax[i];
 }
 
+//temporary container for particles
 Box temp_container;
 for (int i = 0; i < this->particles.size(); i++){
    for (int j = 0; j < this->particles[i].size(); j++){
@@ -142,7 +175,7 @@ for (int i = 0; i < this->particles.size(); i++){
    }
    }
    
-   // move spheres/particles in the limits of the cube
+// move spheres/particles in the limits of the cube
 for (int i = 0; i < this->particles.size(); i++){
    for (int j = 0; j < this->particles[i].size(); j++){
       for (int k = 0; k < 3; k++){
@@ -197,8 +230,14 @@ std::cout <<"\n Final overlaps: "<<curr_overlaps;
 }
 
 void Box::allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int dim){
-// Allocate spheres to the pbc from the box with an approxiomate equal distribution of same sized spheres
-    
+/*
+Allocate spheres to the pbc from the box with an approxiomate equal distribution of same sized spheres
+
+input:
+
+*/ 
+   
+   
     int x = 0, y = 0, z = 0;
     for (int i = 0; i < this->particles.size(); i++){
       x = 0, y = 0, z = 0;
