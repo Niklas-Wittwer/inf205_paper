@@ -53,7 +53,7 @@ void move_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int start, in
         int z = (int)i/16;
         int y = (int)(i-z*16)/4;
         int x = i-y*4-z*16;
-        pbc[x1][y1][z1].copy_spheres(&pbc[x][y][z], cube_len*(x1-x), cube_len*(y1-y), cube_len*(z1-z));
+        pbc[z1][y1][x1].copy_spheres(&pbc[z][y][x], cube_len*(z1-z), cube_len*(y1-y), cube_len*(x1-x));
     }
 }
 
@@ -71,7 +71,7 @@ void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc, double cube_le
     int start=0;
     int end=0;
     bool next=false;
-    int ax[3] = {x1, y1, z1};
+    int ax[3] = {z1, y1, x1};
     pbc[0][0][0].optimize(ax, 300, cube_len);
     while (end <= std::pow(pbc.size(),3)){
         if (x1 == pbc.size()){
@@ -87,15 +87,15 @@ void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc, double cube_le
             move_spheres(pbc, start, end, cube_len);
             break;
         }
-        if(pbc[x][y][z].check_sim(pbc[x1][y1][z1])){
+        if(pbc[z][y][x].check_sim(pbc[z1][y1][x1])){
                     end++;
                 }
         else {
             move_spheres(pbc, start, end, cube_len);
             start = end;
-            ax[0] = x1, ax[1]=y1, ax[2]=z1;
+            ax[0] = z1, ax[1]=y1, ax[2]=x1;
             x = x1, y=y1, z=z1;
-            pbc[x][y][z].optimize(ax, 300, cube_len);
+            pbc[z][y][x].optimize(ax, 300, cube_len);
             
         }
        x1++;

@@ -1,5 +1,5 @@
 run: evaluate-confguration generator algo
-	./generator 65536
+	./generator 10200
 	./evaluate-confguration benchmark-configuration.dat
 	./algo benchmark-configuration.dat
 	./evaluate-confguration algo-configuration.dat
@@ -18,5 +18,5 @@ evaluate-confguration: evaluate-configuration.o sphere.o box.o utils.o
 	g++ -g3 -O1 -c -std=c++17 -o $@ $<
 
 clean:
-	rm -f *.o *.dat algo evaluate-confguration generator
+	    del *.exe *.dat *.o algo evaluate-confguration generator
 	

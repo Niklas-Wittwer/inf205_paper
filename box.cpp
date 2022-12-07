@@ -137,6 +137,7 @@ void Box::copy_spheres(Box* other, double dx=0, double dy=0, double dz=0){
       } 
    }
    }
+
 }
 
 bool Box::check_sim(Box other){
@@ -189,9 +190,9 @@ for (int i = 0; i < this->particles.size(); i++){
          temp_container.particles[i][j].set_coordinate(k, rand_num_gen(lower_lim, upper_lim));
          this->particles[i][j].set_coordinate(k, rand_num_gen(lower_lim, upper_lim));
 
-   }
-   }
-   }
+}
+}
+}
 //Check overlaps with current positions
 long curr_overlaps = temp_container.count_overlaps(); 
 std::cout << "\n 1st overlaps: "<< curr_overlaps; 
@@ -224,8 +225,6 @@ for (int n = 0; n < n_attempts; n++){
       continue;
    }
    // Change position of original spheres if the container found a better solution
-   std::cout <<"\n Moving spheres";
-   std::cout <<"\ntemp_overlaps: "<<temp_overlaps;
    curr_overlaps = temp_overlaps;
    temp_container.copy_spheres(this);
 
@@ -259,10 +258,21 @@ int dim: Dimension of the 3d vector
         if (z == dim){
             z = 0;
         }
-       pbc[x][y][z].add_particle_pbc(this->particles[i][j]);
+       pbc[z][y][x].add_particle_pbc(this->particles[i][j]);
         x++;
         }
       }
+         for (int i = 0; i < pbc.size(); i++) {
+        for (int j = 0; j < pbc[i].size(); j++) {
+            for (int k = 0; k < pbc[i][j].size(); k++) {
+                std::cout<<"\n"<<k + 4*j +16*i<<" "<<pbc[i][j][k].particles.size();
+                for (int n =0; n <pbc[i][j][k].particles.size();n++)
+                {
+                  std::cout<<" " <<pbc[i][j][k].particles[n].size();
+                }
+            }
+        }
+    }
 }    
 
 void Box::deallocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc){
