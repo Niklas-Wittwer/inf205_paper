@@ -65,6 +65,7 @@ int main(int argc, char** argv)
    long pid = 0;
    
    // loop over components
+   //ensure that there are at least 1 sphere of each size for each sphere
    for(auto i = N_spheres.begin(); i != N_spheres.end(); i++)
    {
       if(!i->second) continue;
@@ -73,7 +74,9 @@ int main(int argc, char** argv)
       std::cout.flush();
       
       // loop over particles
-      for(auto j = 0; j < i->second; j++)
+      //ensure that there's at least 1 sphere of each size for each pbc cube
+      // Should limit cubes rather than spheres (maybe adjust the fractionm instead)
+      for(auto j = 0; j < std::max(i->second, (long)64); j++)
       {
          double q[3]{};
          for(int d = 0; d < 3; d++) q[d] = a*rand()/(double)RAND_MAX;

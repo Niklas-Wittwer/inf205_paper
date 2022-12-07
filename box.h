@@ -29,7 +29,7 @@ public:
    double get_extensions(int axis);
    void allocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int dim);
    void deallocate_spheres(std::vector<std::vector<std::vector<Box>>>& pbc);
-   void copy_spheres(Box* other, double dx, double dy, double dz);
+   void copy_spheres(Box other, double dx, double dy, double dz);
    void optimize(int ax[3], int n_attempts, double cube_len);
    bool check_sim(Box other);
 

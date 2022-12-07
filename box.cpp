@@ -117,7 +117,7 @@ double Box::get_extensions(int axis) {
    return this->extension[axis];
 }
 
-void Box::copy_spheres(Box* other, double dx=0, double dy=0, double dz=0){
+void Box::copy_spheres(Box other, double dx=0, double dy=0, double dz=0){
    /*
    Function for copying the position of the spheres from one box object to another with respect to the distance between the boxes
    This does not change the structure of either of the boxes, and assumes equal structure of the particles vector
@@ -127,13 +127,13 @@ void Box::copy_spheres(Box* other, double dx=0, double dy=0, double dz=0){
    double dy: Distance from this box to other in y
    double dz: Distance from this box to other in z
    */
-   assert(this->particles.size() == other->particles.size());
+   assert(this->particles.size() == other.particles.size());
    double dist[3] = {dx, dy, dz};    
    for (int i = 0; i < this->particles.size(); i++){
    for (int j = 0; j < this->particles[i].size(); j++){
       for (int k = 0; k < 3; k++){
          double coord = this->particles[i][j].get_coordinate(k) + dist[k];
-         other->particles[i][j].set_coordinate(k, coord);
+         other.particles[i][j].set_coordinate(k, coord);
       } 
    }
    }
@@ -226,7 +226,7 @@ for (int n = 0; n < n_attempts; n++){
    }
    // Change position of original spheres if the container found a better solution
    curr_overlaps = temp_overlaps;
-   temp_container.copy_spheres(this);
+   temp_container.copy_spheres(*this);
 
 }
 std::cout <<"\n Final overlaps: "<<curr_overlaps;
