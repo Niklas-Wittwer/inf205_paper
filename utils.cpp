@@ -46,6 +46,7 @@ void move_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int start, in
     int end: End element to be translated to 3d
     double cube_len: length the sub box/cube
     */
+   
         int z1 = (int)start/16;
         int y1 = (int)(start-z1*16)/4;
         int x1 = start-y1*4-z1*16;
@@ -55,6 +56,7 @@ void move_spheres(std::vector<std::vector<std::vector<Box>>>& pbc, int start, in
         int x = i-y*4-z*16;
         pbc[z1][y1][x1].copy_spheres(pbc[z][y][x], cube_len*(z1-z), cube_len*(y1-y), cube_len*(x1-x));
     }
+
 }
 
 void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc, double cube_len){
@@ -84,6 +86,7 @@ void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc, double cube_le
         }
         
         if (z1 == pbc.size()){
+            std::cout << "\n so that just happened";
             move_spheres(pbc, start, end, cube_len);
             break;
         }
@@ -91,11 +94,16 @@ void monte_carlo(std::vector<std::vector<std::vector<Box>>>& pbc, double cube_le
                     end++;
                 }
         else {
+            if (start != end){
+            // If there's only one sphere with a specific dimension no spheres need to be moved
             move_spheres(pbc, start, end, cube_len);
             start = end;
+            }
             ax[0] = z1, ax[1]=y1, ax[2]=x1;
             x = x1, y=y1, z=z1;
+            std::cout <<"zyx: "<<z <<y<<x;
             pbc[z][y][x].optimize(ax, 200, cube_len);
+        
             
         }
        x1++;
